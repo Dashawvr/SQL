@@ -15,7 +15,8 @@ SELECT * FROM client WHERE Department_idDepartment = 5 OR Department_idDepartmen
 SELECT FirstName,LastName FROM client WHERE Age > 25;
 SELECT FirstName,Passport FROM client GROUP BY FirstName,Passport;
 # # 8. Вивести дані про клієнтів, які мають кредит більше ніж на 5000 тисяч гривень.
-SELECT  DISTINCT(LastName) FROM application,client WHERE  CreditState = 'not returned' AND Sum > 5000;
+SELECT  DISTINCT(LastName) FROM application,client
+WHERE  CreditState = 'not returned' AND Sum > 5000;
 # # 9. Порахувати кількість клієнтів усіх відділень та лише львівських відділень.
 SELECT COUNT(Department_idDepartment) FROM client;
 SELECT COUNT(Department_idDepartment) FROM client
@@ -29,9 +30,16 @@ SELECT COUNT(CreditState),Client_idClient FROM application GROUP BY Client_idCli
 SELECT MAX(Sum) FROM application;
 SELECT MIN(Sum) FROM application;
 # # 13.  Порахувати кількість кредитів для клієнтів, які мають вищу освіту.
-SELECT COUNT(CreditState),Education FROM application JOIN client c on application.Client_idClient = c.idClient  WHERE Education = 'high' GROUP BY Education;
+SELECT COUNT(CreditState),Education FROM application
+    JOIN client c
+        ON application.Client_idClient = c.idClient
+WHERE Education = 'high'
+GROUP BY Education;
 # # 14.  Вивести дані про клієнта, в якого середня сума кредитів найвища.
-SELECT AVG(Sum),FirstName,idClient FROM application JOIN client c on application.Client_idClient = c.idClient GROUP BY FirstName,idClient;
+SELECT AVG(Sum),FirstName,idClient FROM application
+    JOIN client c
+        ON application.Client_idClient = c.idClient
+GROUP BY FirstName,idClient;
 # # 15.  Вивести відділення, яке видало в кредити найбільше грошей.
 SELECT MAX(Sum),DepartmentCity
 FROM application
@@ -58,12 +66,10 @@ WHERE DepartmentCity = 'Kyiv';
 # # 19.  Видалити усі кредити, які є повернені.
 DELETE FROM application WHERE CreditState = 'RETURNED';
 # # 20.  Видалити кредити клієнтів, в яких друга літера прізвища є голосною.
-DELETE FROM application
-JOIN client ON
-WHERE LastName LIKE '_[aoie]%' ;
-
-
-
+DELETE FROM application app
+JOIN client c ON app.Client_idClient = c.idClient
+WHERE LastName LIKE '_[aoie]%';
+#  NOT Complete
 # # 21.  Знайти львівські відділення, які видали кредитів на загальну суму більше ніж 5000.
 SELECT SUM(Sum) FROM application
     JOIN client
@@ -97,6 +103,14 @@ WHERE City = (SELECT City FROM application
      WHERE CreditState = 'Not returned' AND City = 'KYIV' GROUP BY City LIMIT 1)
 AND  Sum < (SELECT MAX(Sum) FROM application);
 # # 27.  Max sum.
-SELECT MAX(CountOfWorkers) AS WORKERS FROM department WHERE DepartmentCity = 'Lviv';
+SELECT MAX(CountOfWorkers) AS WORKERS
+FROM department
+WHERE DepartmentCity = 'Lviv';
 # # 28.  Місто чувака який набрав найбільше кредитів.
-SELECT MAX(Sum),City FROM application  JOIN client ON application.Client_idClient = client.idClient WHERE CreditState = 'Not returned' GROUP BY City LIMIT 1;
+SELECT MAX(Sum),City
+FROM application
+    JOIN client
+        ON application.Client_idClient = client.idClient
+WHERE CreditState = 'Not returned'
+GROUP BY City
+LIMIT 1;
